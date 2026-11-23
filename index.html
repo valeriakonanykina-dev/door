@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Поварское дело — ДОД</title>
+<style>
+:root{--bg:#f7f5f2;--card:#fff;--ink:#1f2328;--muted:#6b7280;--brand:#e07b39;--brand2:#c2622a;--line:#e6e2dc;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;overflow-x:hidden}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+section{padding:28px 0;border-bottom:1px solid var(--line)}
+h2{font-size:1.35rem;margin-bottom:16px}
+h2 .a{color:var(--brand)}
+p{margin-bottom:10px}
+.muted{color:var(--muted);font-size:.92rem}
+.btn{display:inline-block;border:0;cursor:pointer;text-decoration:none;padding:12px 20px;border-radius:10px;font:600 .98rem system-ui;transition:.15s}
+.btn:hover{opacity:.9}
+.btn-p{background:var(--brand);color:#fff}
+.btn-g{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5)}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+
+/* меню */
+nav{position:sticky;top:0;z-index:10;background:rgba(247,245,242,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:16px;padding:10px 16px;overflow-x:auto;scrollbar-width:none}
+nav .wrap::-webkit-scrollbar{display:none}
+nav a{color:var(--muted);text-decoration:none;font-size:.9rem;white-space:nowrap}
+nav a:hover{color:var(--brand)}
+
+/* hero */
+header{background:linear-gradient(135deg,#2b2118,#4a3424);color:#fff;padding:36px 0 30px}
+header h1{font-size:2rem;margin-bottom:8px}
+header .meta{opacity:.85;font-size:.95rem;margin-bottom:14px}
+.slogan{background:rgba(255,255,255,.08);border-left:4px solid var(--brand);padding:12px 14px;border-radius:8px;margin-bottom:20px}
+
+/* сетки */
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;transition:.15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.card h3{font-size:1.02rem;margin-bottom:6px}
+.card .ic{font-size:1.4rem;display:block;margin-bottom:6px}
+
+/* вариант A: карточки на всю ширину */
+.full{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);padding:28px 0;border-bottom:1px solid var(--line)}
+.full .grid{padding:0 24px;gap:20px}
+.full .g3{grid-template-columns:repeat(3,1fr)}
+.full .g2{grid-template-columns:repeat(2,1fr)}
+max-width:760px{.full .g3,.full .g2{grid-template-columns:1fr;padding:0 16px}}
+
+/* вариант B: на весь экран */
+.fscreen{width:100vw;min-height:100vh;margin-left:calc(50% - 50vw);display:flex;align-items:center;justify-content:center;padding:40px 24px;color:#fff;background:linear-gradient(135deg,rgba(43,33,24,.92),rgba(74,52,36,.92)),url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1600') center/cover}
+.fscreen .in{max-width:760px;width:100%}
+.fscreen h2{font-size:2rem;margin-bottom:14px}
+.fscreen p{font-size:1.05rem;opacity:.92;margin-bottom:20px}
+
+<!-- ===== ГАЛЕРЕЯ ФОТО ===== -->
+<section id="gallery" class="full">
+  <div class="wrap"><h2>Как у нас <span class="a">на кухне</span></h2></div>
+  
+  <div class="grid g3">
+    <!-- Фото 1 -->
+    <figure class="photo">
+      <img src="img/kitchen-1.jpg" alt="Учебная кухня" loading="lazy">
+      <figcaption>Учебная кухня</figcaption>
+    </figure>
+    
+    <!-- Фото 2 -->
+    <figure class="photo">
+      <img src="img/kitchen-2.jpg" alt="Мастер-класс по выпечке" loading="lazy">
+      <figcaption>Мастер-класс по выпечке</figcaption>
+    </figure>
+    
+    <!-- Фото 3 -->
+    <figure class="photo">
+      <img src="img/kitchen-3.jpg" alt="Студенты на практике" loading="lazy">
+      <figcaption>Студенты на практике</figcaption>
+    </figure>
+</section>
+
+/* таймлайн */
+.tl{list-style:none;position:relative;padding-left:26px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl li{position:relative;margin-bottom:14px}
+.tl li::before{content:"";position:absolute;left:-24px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--brand);border:2px solid var(--bg)}
+.tl time{font-weight:700;color:var(--brand2);margin-right:8px}
+
+/* таблица */
+.ts{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--r);overflow:hidden}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:.95rem}
+th{background:#f0ebe4;font-size:.88rem;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border:0}
+td.n{white-space:nowrap;font-weight:600}
+
+/* шаги */
+.steps{list-style:none;counter-reset:s;display:grid;gap:12px}
+.steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 58px;position:relative}
+.steps li::before{content:counter(s);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;font-weight:700;display:grid;place-items:center}
+.steps b{display:block;margin-bottom:2px}
+
+/* FAQ */
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600;list-style:none;position:relative;padding-right:24px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:0;top:-2px;font-size:1.3rem;color:var(--brand)}
+details[open] summary::after{content:"–"}
+details p{margin-top:10px;color:var(--muted);font-size:.95rem}
+
+/* форма */
+form{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.field{margin-bottom:14px}
+.field label{display:block;font-weight:600;font-size:.9rem;margin-bottom:5px}
+.field input,.field select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fdfcfb}
+.field input:focus,.field select:focus{outline:2px solid var(--brand);border-color:transparent}
+.seats{font-size:.82rem;color:var(--brand2);font-weight:600;margin-top:4px}
+.note{font-size:.85rem;color:var(--muted);margin-top:12px}
+.ok{display:none;background:#e8f5e9;border:1px solid #a5d6a7;color:#2e7d32;border-radius:10px;padding:14px;margin-top:14px}
+
+/* квиз */
+.q{margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.q:last-of-type{border:0}
+.q label{display:block;padding:8px 0;cursor:pointer;font-size:.95rem}
+.q label:hover{color:var(--brand2)}
+.q input{margin-right:8px;accent-color:var(--brand)}
+.hint{font-size:.86rem;margin-top:6px;display:none;line-height:1.45}
+.hint.ok{color:#2e7d32;display:block}
+.hint.bad{color:#c62828;display:block}
+
+/* родителям */
+.parents{background:#eef3f8;border:1px solid #cfdce8;border-radius:var(--r);padding:18px 20px}
+.parents a{color:#22577a;font-weight:600}
+footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.85rem}
+
+max-width:640px{
+  header h1{font-size:1.55rem}
+  h2{font-size:1.2rem}
+  section{padding:22px 0}
+  .fscreen h2{font-size:1.5rem}
+  .steps li{padding-left:52px}
+}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a href="#skills">Навыки</a><a href="#quiz">Квиз</a><a href="#jobs">Зарплаты</a>
+  <a href="#steps">Поступление</a><a href="#where">Где учиться</a><a href="#faq">Вопросы</a><a href="#zapis">Записаться</a>
+</div></nav>
+
+<header><div class="wrap">
+  <h1>Поварское дело</h1>
+  <p class="meta">43.01.09 · Повар, кондитер · 📍 [г. Дзержинский, ул. Академика Жукова, 24] · ⏱ 3 г. 10 мес.</p>
+  <div class="slogan">Готовишь дома? Сделай это профессией — с зарплатой, практикой и стажировкой на реальной кухне.</div>
+  <div class="cta">
+    <a class="btn btn-p" href="#zapis">Записаться на ДОД</a>
+    <a class="btn btn-g" href="#quiz">Пройти квиз</a>
+  </div>
+</div></header>
+
+<main>
+<!-- ===== ТРИ ФОТО ПЕРЕД ДНЁМ ИЗ ЖИЗНИ ===== -->
+<section id="top-gallery">
+  <div class="wrap">
+    <div class="grid g3" style="gap:16px;">
+      
+      <figure style="margin:0; background:#fff; border:1px solid #e6e2dc; border-radius:14px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06);">
+        <img src="kitchen-1.jpg" alt="Учебная кухня" style="width:100%; height:220px; object-fit:cover; display:block;">
+      </figure>
+
+      <figure style="margin:0; background:#fff; border:1px solid #e6e2dc; border-radius:14px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06);">
+        <img src="ktchen-3.jpg" alt="Студенты на практике" style="width:100%; height:220px; object-fit:cover; display:block;">
+      </figure>
+
+      <figure style="margin:0; background:#fff; border:1px solid #e6e2dc; border-radius:14px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06);">
+        <img src="kitchen-2.jpg" alt="Готовые блюда" style="width:100%; height:220px; object-fit:cover; display:block;">
+      </figure>
+
+    </div>
+  </div>
+</section>
+<section><div class="wrap">
+  <h2>Один день <span class="a">из жизни</span></h2>
+  <ul class="tl">
+    <li><time>07:30</time>Приёмка и проверка продуктов</li>
+    <li><time>08:00</time>Подготовка рабочих мест, заготовки</li>
+    <li><time>09:00</time>Горячий цех: супы, соусы, гарниры</li>
+    <li><time>12:00</time>Обеденный «час пик» — работа в команде</li>
+    <li><time>14:00</time>Холодный цех и кондитерка</li>
+    <li><time>15:30</time>Контроль качества, разбор ошибок</li>
+  </ul>
+</div></section>
+
+<!-- Вариант A: карточки на всю ширину -->
+<section id="skills" class="full">
+  <div class="wrap"><h2>Чему <span class="a">научишься</span></h2></div>
+  <div class="grid g3">
+    <div class="card"><span class="ic">🔪</span><h3>Технологии приготовления</h3><p class="muted">От базовых соусов до авторских блюд</p></div>
+    <div class="card"><span class="ic">🎂</span><h3>Кондитерское дело</h3><p class="muted">Торты, выпечка, шоколад, карамель</p></div>
+    <div class="card"><span class="ic">📋</span><h3>Документация</h3><p class="muted">Техкарты, калькуляция, ХАССП</p></div>
+    <div class="card"><span class="ic">🧊</span><h3>Организация кухни</h3><p class="muted">Заготовки, хранение, работа на линии</p></div>
+    <div class="card"><span class="ic">🍽</span><h3>Подача и сервис</h3><p class="muted">Оформление блюд, стандарты</p></div>
+  </div>
+</section>
+
+<section id="quiz"><div class="wrap">
+  <h2>Квиз: <span class="a">угадай, что на кухне</span></h2>
+  <p class="muted" style="margin-bottom:18px">6 лёгких вопросов про профессию повара.</p>
+  <form id="quizForm">
+    <div class="q"><p><b>1. Что готовят в горячем цеху?</b></p>
+      <label><input type="radio" name="q1" value="a" required> Мороженое</label>
+      <label><input type="radio" name="q1" value="b"> Суп</label>
+      <label><input type="radio" name="q1" value="c"> Салат «Цезарь»</label>
+      <div class="hint" data-h="q1"></div></div>
+    <div class="q"><p><b>2. Что такое mise en place?</b></p>
+      <label><input type="radio" name="q2" value="a" required> Подготовка продуктов до готовки</label>
+      <label><input type="radio" name="q2" value="b"> Название десерта</label>
+      <label><input type="radio" name="q2" value="c"> Мытьё посуды</label>
+      <div class="hint" data-h="q2"></div></div>
+    <div class="q"><p><b>3. Чем занимается кондитер?</b></p>
+      <label><input type="radio" name="q3" value="a" required> Жарит котлеты</label>
+      <label><input type="radio" name="q3" value="b"> Готовит супы</label>
+      <label><input type="radio" name="q3" value="c"> Печёт торты и десерты</label>
+      <div class="hint" data-h="q3"></div></div>
+    <div class="q"><p><b>4. Что НЕ портится дольше всего?</b></p>
+      <label><input type="radio" name="q4" value="a" required> Молоко</label>
+      <label><input type="radio" name="q4" value="b"> Мёд</label>
+      <label><input type="radio" name="q4" value="c"> Свежая рыба</label>
+      <div class="hint" data-h="q4"></div></div>
+    <div class="q"><p><b>5. Что такое бланширование?</b></p>
+      <label><input type="radio" name="q5" value="a" required> Быстро обдать кипятком и остудить</label>
+      <label><input type="radio" name="q5" value="b"> Заморозить продукт</label>
+      <label><input type="radio" name="q5" value="c"> Посолить перед подачей</label>
+      <div class="hint" data-h="q5"></div></div>
+    <div class="q"><p><b>6. Какое блюдо русское?</b></p>
+      <label><input type="radio" name="q6" value="a" required> Паэлья</label>
+      <label><input type="radio" name="q6" value="b"> Щи</label>
+      <label><input type="radio" name="q6" value="c"> Суши</label>
+      <div class="hint" data-h="q6"></div></div>
+    <button class="btn btn-p" type="submit">Проверить ответы</button>
+  </form>
+  <div class="ok" id="quizRes"></div>
+</div></section>
+
+<section id="jobs"><div class="wrap">
+  <h2>Кем <span class="a">работать</span></h2>
+  <div class="ts"><table>
+    <thead><tr><th>Должность</th><th>Где</th><th>Вилка, руб.</th></tr></thead>
+    <tbody>
+      <tr><td>Повар горячего цеха</td><td>ресторан, кафе</td><td class="n">45 000 – 70 000</td></tr>
+      <tr><td>Кондитер</td><td>кондитерская</td><td class="n">45 000 – 65 000</td></tr><tr><td>Повар-универсал</td><td>отель, кейтеринг</td><td class="n">55 000 – 80 000</td></tr>
+      <tr><td>Су-шеф</td><td>ресторан</td><td class="n">80 000 – 120 000</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<section id="steps"><div class="wrap">
+  <h2>Как <span class="a">поступить</span></h2>
+  <ol class="steps">
+    <li><b>Выбери специальность</b>Пройди квиз или запишись на консультацию</li>
+    <li><b>Подай документы</b>Аттестат, заявление, фото</li>
+    <li><b>Пройди конкурс аттестатов</b>Средний балл</li>
+    <li><b>Запишись на ДОД</b>Мастер-класс «Испеки и забери»</li>
+  </ol>
+</div></section>
+
+<section id="where"><div class="wrap">
+  <h2>Где <span class="a">обучают</span></h2>
+  <div class="card" style="margin-bottom:14px">
+    <h3>Наш техникум</h3>
+    <p><b>Специальность:</b> 43.01.09 / 43.02.15</p>
+    <p><b>Адрес:</b> [ваш адрес]</p>
+    <p><b>Срок:</b> 9 кл. — 3 г. 10 мес.; 11 кл. — 2 г. 10 мес.</p>
+  <div class="card">
+    <h3>Продолжить в вузе</h3>
+    <p class="muted">Технология продукции общепита · Организация общепита</p>
+  </div>
+</div></section>
+
+<!-- ===== 3D ТОРТ ===== -->
+<section id="cake3d">
+  <div class="wrap">
+    <h2>Собери торт <span class="a">в 3D</span></h2>
+    <p class="muted" style="margin-bottom:18px">Вращай мышью, выбирай корж, крем и украшение.</p>
+
+    <div class="cake3d-builder">
+      <div id="cake3dView"></div>
+
+      <form class="cake3d-controls" id="cake3dForm">
+        <div class="field">
+          <label>Корж</label>
+          <select id="base3d">
+            <option value="biscuit">Бисквит</option>
+            <option value="chocolate">Шоколадный</option>
+            <option value="honey">Медовик</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Крем</label>
+          <select id="cream3d">
+            <option value="vanilla">Сливочный</option>
+            <option value="choco">Шоколадный</option>
+            <option value="berry">Ягодный</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Украшение</label>
+          <select id="deco3d">
+            <option value="candles">Свечи</option>
+            <option value="berries">Ягоды</option>
+            <option value="choco">Шоколадные шарики</option>
+          </select>
+        </div>
+        <button class="btn btn-p" type="button" id="cake3dReset">Сбросить</button>
+        <a class="btn btn-p" href="#zapis" style="margin-top:8px;display:block;text-align:center">Записаться на мастер-класс</a>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<!-- Вариант B: на весь экран -->
+<section class="fscreen">
+  <div class="in">
+    <h2>Попробуй профессию на вкус</h2>
+    <p>Приготовь блюдо на настоящей учебной кухне и забери результат с собой. Родителям — отдельная программа.</p>
+    <a class="btn btn-p" href="#zapis">Записаться на ДОД</a>
+  </div>
+</section>
+
+<section id="faq"><div class="wrap">
+  <h2>Вопросы <span class="a">и ответы</span></h2>
+  <details><summary>Нужно ли уметь готовить?</summary><p>Нет. Начинаем с базовых техник.</p></details>
+  <details><summary>Есть ли форма?</summary><p>Да, нужны форма и нож. Список выдаём после зачисления.</p></details>
+  <details><summary>Можно совмещать с работой?</summary><p>Да, на старших курсах. Помогаем с трудоустройством.</p></details>
+  <details><summary>Медкнижка нужна?</summary><p>Да, оформляется до практики.</p></details>
+</div></section>
+
+<section id="zapis"><div class="wrap">
+  <h2>Записаться <span class="a">на ДОД</span></h2>
+  <form id="regForm" novalidate>
+    <div class="field"><label>Мероприятие</label>
+      <select id="event" required>
+        <option value="">— выберите —</option>
+        <option value="masterclass">Мастер-класс «Выпечка»</option>
+        <option value="tour">Экскурсия по кухне</option>
+        <option value="consult">Консультация</option>
+      </select></div>
+    <div class="field"><label>Дата и время</label>
+      <select required>
+        <option value="">— выберите —</option>
+        <option>15 ноября, 10:00</option>
+        <option>15 ноября, 12:00</option>
+        <option>15 ноября, 14:00</option>
+      </select>
+      <p class="seats" id="seats">Выберите мероприятие</p></div>
+    <div class="field"><label>Имя</label><input required placeholder="Как к вам обращаться"></div>
+    <div class="field"><label>Телефон или почта</label><input required placeholder="+7 ... или mail@"></div>
+    <div class="field"><label>Класс / статус</label>
+      <select><option>9 класс</option><option>11 класс</option><option>Родитель</option></select></div>
+    <button class="btn btn-p" type="submit">Записаться</button>
+    <p class="note">Придёт подтверждение и напоминание за24 часа.</p>
+    <div class="ok" id="regOk">✅ Заявка отправлена!</div>
+  </form>
+</div></section>
+
+<section style="border:0"><div class="wrap">
+  <div class="parents">
+    <h2 style="font-size:1.1rem">Для родителей</h2>
+    <p>Трудоустройство — [X]%, практика с 2 курса, стипендии и бюджетные места.</p>
+    <p><a href="#">Подробнее →</a></p>
+  </div>
+</div></section>
+
+</main>
+
+<footer>© [Год] [Техникум] · Поварское дело</footer>
+
+<script>
+// Форма
+const SEATS={masterclass:4,tour:8,consult:3};
+const ev=document.getElementById('event'),seats=document.getElementById('seats');
+ev.onchange=()=>{const v=ev.value;seats.textContent=v&&SEATS[v]?'Свободных мест: '+SEATS[v]+' из 15':'Выберите мероприятие'};
+document.getElementById('regForm').onsubmit=e=>{
+  e.preventDefault();const f=e.target;
+  if(!f.checkValidity()){f.reportValidity();return}
+  document.getElementById('regOk').style.display='block';
+  f.reset();seats.textContent='Выберите мероприятие';
+  document.getElementById('regOk').scrollIntoView({behavior:'smooth',block:'center'});
+};
+
+// Квиз
+const Q={
+  q1:{c:'b',ok:'Верно! В горячем цеху варят, жарят, тушат.',bad:'Нет. Мороженое и салаты — холодный цех.'},
+  q2:{c:'a',ok:'Точно! Mise en place — подготовка продуктов до готовки.',bad:'Нет. Это французский термин — подготовка до готовки.'},
+  q3:{c:'c',ok:'Верно! Кондитер отвечает за выпечку и десерты.',bad:'Нет. Котлеты и супы — повар, кондитер — десерты.'},
+  q4:{c:'b',ok:'Правильно! Мёд хранится годами.',bad:'Нет. Молоко и рыба портятся быстро, мёд — нет.'},
+  q5:{c:'a',ok:'Верно! Бланширование — быстро обдать кипятком.',bad:'Нет. Это обваривание кипятком, а не заморозка.'},
+  q6:{c:'b',ok:'Верно! Щи — традиционное русское блюдо.',bad:'Нет. Паэлья — испанская, суши — японские.'}
+};
+document.getElementById('quizForm').onsubmit=function(e){
+  e.preventDefault();
+  if(!this.checkValidity()){this.reportValidity();return}
+  const d=new FormData(this);let s=0;
+  Object.keys(Q).forEach(k=>{
+    const v=d.get(k),h=document.querySelector('.hint[data-h="'+k+'"]'),i=Q[k];
+    if(v===i.c){s++;h.className='hint ok';h.textContent='✅ '+i.ok}
+    else{h.className='hint bad';h.textContent='❌ '+i.bad}
+  });
+  const r=document.getElementById('quizRes');
+  r.style.display='block';r.className='ok';
+  if(s===6)r.innerHTML='🏆 <b>6 из 6!</b> Ты прирождённый повар. Приходи на мастер-класс.';
+  else if(s>=4){r.style.background='#fff8e1';r.style.borderColor='#ffe082';r.style.color='#795548';r.innerHTML='👍 <b>'+s+' из 6.</b> Хороший результат! Приходи на ДОД.'}
+  else{r.style.background='#fce4ec';r.style.borderColor='#f8bbd0';r.style.color='#880e4f';r.innerHTML='🌱 <b>'+s+' из 6.</b> Не страшно — учат с нуля! Запишись на экскурсию.'}
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+/* ===== 3D ТОРТ ===== */
+(function(){
+  const container = document.getElementById('cake3dView');
+  if (!container || typeof THREE === 'undefined') return;
+
+  // Сцена
+  const scene = new THREE.Scene();
+  scene.background = null;
+
+  // Камера
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+  camera.position.set(0, 3.5, 6);
+  camera.lookAt(0, 1, 0);
+
+  // Рендер
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.shadowMap.enabled = true;
+  container.appendChild(renderer.domElement);
+
+  // Свет
+  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+  const dir = new THREE.DirectionalLight(0xffffff, 1.1);
+  dir.position.set(4, 8, 5);
+  dir.castShadow = true;
+  scene.add(dir);
+
+  // Группа торта (чтобы вращать целиком)
+  const cake = new THREE.Group();
+  scene.add(cake);
+
+  // Цвета
+  const COLORS = {
+    base: { biscuit:0xf0d9b5, chocolate:0x6b4423, honey:0xd4a04a },
+    cream:{ vanilla:0xfff5e6, choco:0x8b5e3c, berry:0xe07b9a }
+  };
+
+  // Материалы
+  let baseMat = new THREE.MeshStandardMaterial({ color: COLORS.base.biscuit, roughness:0.8 });
+  let creamMat = new THREE.MeshStandardMaterial({ color: COLORS.cream.vanilla, roughness:0.6 });
+
+  // Слои: корж-крем-корж-крем-корж
+  const layers = [];
+  const radius = 1.4;
+  const heights = [0.45, 0.25, 0.45, 0.25, 0.45];
+  let y = 0;
+
+  heights.forEach((h, i) => {
+    const isCream = i % 2 === 1;
+    const geo = new THREE.CylinderGeometry(radius, radius, h, 48);
+    const mat = isCream ? creamMat : baseMat;
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.y = y + h/2;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    cake.add(mesh);
+    layers.push({ mesh, isCream });
+    y += h;
+  });
+
+  // Верхний крем (шапка)
+  const topGeo = new THREE.CylinderGeometry(radius, radius, 0.08, 48);
+  const topMesh = new THREE.Mesh(topGeo, creamMat);
+  topMesh.position.y = y + 0.04;
+  topMesh.castShadow = true;
+  cake.add(topMesh);
+
+  // Украшения — группа
+  const decorGroup = new THREE.Group();
+  cake.add(decorGroup);
+
+  function clearDecor(){
+    while (decorGroup.children.length) {
+      const c = decorGroup.children.pop();
+      c.geometry.dispose();
+      c.material.dispose();
+    }
+  }
+
+  function addCandles(){
+    const colors = [0xff5a5a, 0x5aafff, 0xffd75a, 0x8aff5a];
+    for (let i = 0; i < 5; i++) {
+      const angle = (i / 5) * Math.PI * 2;
+      const r = 0.9;
+      const geo = new THREE.CylinderGeometry(0.05, 0.05, 0.4, 12);
+      const mat = new THREE.MeshStandardMaterial({ color: colors[i % colors.length] });
+      const candle = new THREE.Mesh(geo, mat);
+      candle.position.set(Math.cos(angle)*r, y + 0.28, Math.sin(angle)*r);
+      candle.castShadow = true;
+      decorGroup.add(candle);
+
+      // Огонёк
+      const flameGeo = new THREE.SphereGeometry(0.06, 8, 8);
+      const flameMat = new THREE.MeshBasicMaterial({ color:0xffaa00 });
+      const flame = new THREE.Mesh(flameGeo, flameMat);
+      flame.position.set(candle.position.x, y + 0.52, candle.position.z);
+      decorGroup.add(flame);
+    }
+  }
+
+  function addBerries(){
+    const colors = [0xe63946, 0x9d4edd, 0xf72585];
+    for (let i = 0; i < 9; i++) {
+      const angle = (i / 9) * Math.PI * 2;
+      const r = 0.6 + Math.random() * 0.5;
+      const geo = new THREE.SphereGeometry(0.12, 12, 12);
+      const mat = new THREE.MeshStandardMaterial({ color: colors[i % colors.length], roughness:0.4 });
+      const berry = new THREE.Mesh(geo, mat);
+      berry.position.set(Math.cos(angle)*r, y + 0.12, Math.sin(angle)*r);
+      berry.castShadow = true;
+      decorGroup.add(berry);
+    }
+  }
+
+  function addChocoBalls(){
+    for (let i = 0; i < 12; i++) {
+      const angle = (i / 12) * Math.PI * 2;
+      const r = 0.5 + Math.random() * 0.6;
+      const geo = new THREE.SphereGeometry(0.08, 10, 10);
+      const mat = new THREE.
+      MeshStandardMaterial({ color:0x3e2723, roughness:0.3 });
+      const ball = new THREE.Mesh(geo, mat);
+      ball.position.set(Math.cos(angle)*r, y + 0.1, Math.sin(angle)*r);
+      ball.castShadow = true;
+      decorGroup.add(ball);
+    }
+  }
+
+  // Обновление по выбору
+  function updateCake(){
+    const b = document.getElementById('base3d').value;
+    const c = document.getElementById('cream3d').value;
+    const d = document.getElementById('deco3d').value;
+
+    baseMat.color.setHex(COLORS.base[b]);
+    creamMat.color.setHex(COLORS.cream[c]);
+
+    clearDecor();
+    if (d === 'candles') addCandles();
+    else if (d === 'berries') addBerries();
+    else addChocoBalls();
+  }
+
+  ['base3d','cream3d','deco3d'].forEach(id => {
+    document.getElementById(id).addEventListener('change', updateCake);
+  });
+
+  document.getElementById('cake3dReset').addEventListener('click', () => {
+    document.getElementById('base3d').value = 'biscuit';
+    document.getElementById('cream3d').value = 'vanilla';
+    document.getElementById('deco3d').value = 'candles';
+    updateCake();
+  });
+
+  updateCake();
+
+  // Вращение мышью (простое)
+  let isDown = false, prevX = 0;
+  container.addEventListener('mousedown', e => { isDown = true; prevX = e.clientX; });
+  window.addEventListener('mouseup', () => isDown = false);
+  window.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    const dx = e.clientX - prevX;
+    prevX = e.clientX;
+    cake.rotation.y += dx * 0.01;
+  });
+
+  // Автовращение
+  let autoRotate = true;
+  container.addEventListener('mouseenter', () => autoRotate = false);
+  container.addEventListener('mouseleave', () => autoRotate = true);
+
+  // Размер
+  function resize(){
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Анимация
+  function animate(){
+    requestAnimationFrame(animate);
+    if (autoRotate) cake.rotation.y += 0.005;
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
